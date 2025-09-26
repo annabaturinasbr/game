@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Что новенького?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+    button {
+      font-size: 1.5rem;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:active {
+      transform: scale(0.95) rotate(-2deg);
+    }
+    #message {
+      margin-top: 30px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      display: none;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+      animation: fadeIn 1s ease forwards;
+    }
+    #counter {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      color: white;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <button id="clickBtn">Жми сюда!</button>
+  <div id="counter">Осталось кликов: 10</div>
+  <div id="message">🎉 Что новенького? 🎉</div>
+
+  <script>
+    let clicks = 0;
+    const target = 10;
+    const btn = document.getElementById('clickBtn');
+    const counter = document.getElementById('counter');
+    const message = document.getElementById('message');
+
+    const buttonTexts = [
+      "Жми сюда!",
+      "Ещё разочек!",
+      "Ну давай, сильнее!",
+      "Ты почти герой!",
+      "Не сдавайся 💪",
+      "Уже жарко 🔥",
+      "Осталось чуть-чуть!",
+      "Терпение 😏",
+      "Финальный рывок!",
+      "ГОТОВО!"
+    ];
+
+    const buttonColors = [
+      "#fff",
+      "#ffadad",
+      "#ffd6a5",
+      "#fdffb6",
+      "#caffbf",
+      "#9bf6ff",
+      "#a0c4ff",
+      "#bdb2ff",
+      "#ffc6ff",
+      "#fffffc"
+    ];
+
+    btn.addEventListener('click', () => {
+      clicks++;
+      const remaining = target - clicks;
+
+      // Меняем текст и цвет кнопки
+      if (clicks <= buttonTexts.length) {
+        btn.textContent = buttonTexts[clicks - 1];
+        btn.style.backgroundColor = buttonColors[clicks - 1];
+      }
+
+      if (remaining > 0) {
+        counter.textContent = `Осталось кликов: ${remaining}`;
+      } else {
+        btn.style.display = 'none';
+        counter.style.display = 'none';
+        message.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сюрприз с котами</title>
+  <style>
+    body {
+      background: #f8f8f8;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding-top: 50px;
+    }
+    .box {
+      width: 200px;
+      height: 150px;
+      background: #c2a671;
+      border: 3px solid #8b6b3d;
+      margin: 0 auto;
+      position: relative;
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 18px;
+    }
+    .hidden {
+      display: none;
+    }
+    .emoji {
+      margin-top: 20px;
+      font-size: 60px;
+      animation: pop 0.6s ease forwards;
+      display: block;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .love {
+      font-size: 24px;
+      color: #e91e63;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box" id="box">Нажми на меня</div>
+  <div id="emojis"></div>
+  <div class="love hidden" id="loveText">👱‍♀️🍣 Я тебя люблю ❤️</div>
+
+  <script>
+    // массив котов-эмодзи
+    const cats = ['🐱','😸','😺','😻','😹','😽'];
+    let step = 0;
+
+    const box = document.getElementById('box');
+    const emojisDiv = document.getElementById('emojis');
+    const loveText = document.getElementById('loveText');
+
+    box.addEventListener('click', () => {
+      if (step < cats.length) {
+        const cat = document.createElement('div');
+        cat.textContent = cats[step];
+        cat.classList.add('emoji');
+        emojisDiv.appendChild(cat);
+        step++;
+      } else if (step === cats.length) {
+        loveText.cla

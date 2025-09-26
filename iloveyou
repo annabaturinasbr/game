@@ -69,4 +69,10 @@
         emojisDiv.appendChild(cat);
         step++;
       } else if (step === cats.length) {
-        loveText.cla
+        loveText.classList.remove('hidden');
+        step++;
+      }
+    });
+  </script>
+</body>
+</html>

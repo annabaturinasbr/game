@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Небольшое признание</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --accent:#ff5c8a;
+    --muted:#9aa6bd;
+    --glass: rgba(255,255,255,0.04);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 10% 10%, rgba(255,92,138,0.06), transparent 10%),
+      radial-gradient(900px 400px at 90% 90%, rgba(85,120,255,0.04), transparent 10%),
+      var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:24px;
+  }
+
+  .card{
+    width:100%;
+    max-width:720px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    padding:28px;
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:24px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  @media (max-width:880px){
+    .card{grid-template-columns:1fr; padding:20px;}
+  }
+
+  .left {
+    padding:12px 6px;
+  }
+  h1{
+    margin:0 0 8px 0;font-size:26px;letter-spacing:-0.02em;
+  }
+  p.lead{margin:0 0 18px 0;color:var(--muted);}
+
+  .bubble{
+    background:var(--glass);
+    border-radius:12px;padding:14px;
+    margin-bottom:14px;color:#dbe9ff;
+    border:1px solid rgba(255,255,255,0.02);
+  }
+
+  .choices{display:flex;flex-direction:column;gap:10px;}
+  .btn{
+    border:0;cursor:pointer;padding:12px 14px;border-radius:10px;font-weight:600;
+    background:linear-gradient(90deg,#132033, #0b1b2a); color:#dff1ff;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s;
+    text-align:left;
+    display:flex;gap:12px;align-items:center;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn .emoji{font-size:18px}
+  .btn.secondary{
+    background:transparent;border:1px solid rgba(255,255,255,0.04); color:var(--muted);
+  }
+  .small{font-size:13px;color:var(--muted);}
+
+  .right{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;padding:12px;
+  }
+
+  .card-art{
+    width:100%;height:260px;border-radius:12px;background:
+      linear-gradient(180deg, rgba(255,92,138,0.12), rgba(85,120,255,0.06));
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    color:white;text-align:center;padding:16px;
+    position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03);
+  }
+  .heart{
+    font-size:78px;line-height:1;margin:4px 0;filter:drop-shadow(0 6px 18px rgba(255,0,120,0.18));
+    transform-origin:center;
+    animation:beat 1200ms infinite;
+  }
+  @keyframes beat{
+    0%{transform:scale(1)}
+    30%{transform:scale(1.14)}
+    60%{transform:scale(0.98)}
+    100%{transform:scale(1)}
+  }
+
+  .footer{
+    display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px;
+    color:var(--muted);font-size:13px;
+  }
+
+  input[name="name"]{
+    width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
+    background:transparent;color:inherit;outline:none;font-size:15px;
+  }
+
+  .result{
+    text-align:center;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .result h2{margin:8px 0 6px 0;font-size:22px}
+  .result p{margin:0;color:var(--muted)}
+  .big-cta{
+    margin-top:12px;padding:12px 16px;border-radius:12px;border:0;font-weight:700;cursor:pointer;
+    background:linear-gradient(90deg,var(--accent), #6b6dff);color:white;font-size:16px;
+  }
+  /* floating hearts */
+  .floating-heart{
+    position:absolute;pointer-events:none;user-select:none;
+    font-size:20px;opacity:.9;transform:translate(-50%,-50%);
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    to{transform:translate(-50%,-160%) rotate(20deg); opacity:0}
+  }
+
+  /* tiny helper */
+  .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="card" role="application" aria-label="Игра-признание в любви">
+  <div class="left">
+    <h1>Небольшая игра — признание 💌</h1>
+    <p class="lead">Сделай игру персональной: введи имя, ответь на пару забавных вопросов, и в конце появится твоё признание.</p>
+
+    <div class="bubble" id="intro">
+      <label class="small muted">Кому адресовано признание?</label>
+      <input id="targetName" name="name" placeholder="Например: Марина" aria-label="Имя любимого" />
+    </div>
+
+    <div id="stepArea">
+      <div class="bubble">
+        <div class="small muted">Выбери настрой игры</div>
+        <div class="choices" id="choices0">
+          <button class="btn" data-choice="romantic"><span class="emoji">🌹</span><div><strong>Романтично</strong><div class="small muted">много сердечек и свечей</div></div></button>
+          <button class="btn" data-choice="funny"><span class="emoji">😄</span><div><strong>Весело</strong><div class="small muted">шутки и мемы</div></div></button>
+          <button class="btn secondary" id="surpriseBtn"><span class="emoji">✨</span><div><strong>Сюрприз</strong><div class="small muted">пусть игра сама решит</div></div></button>
+        </div>
+      </div>
+
+      <div class="bubble" style="display:none" id="qBlock">
+        <div class="small muted">Какой подарок любимому нравился бы больше?</div>
+        <div class="choices" id="choices1">
+          <button class="btn" data-choice="flowers">Букет</button>
+          <button class="btn" data-choice="picnic">Пикник</button>
+          <button class="btn" data-choice="movie">Вечер кино</button>
+        </div>
+      </div>
+
+      <div class="bubble" id="playHint" style="display:none">
+        <div class="small muted">Готово — нажми большую кнопку справа, чтобы увидеть признание</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px" class="small muted">Подсказка: в конце можно сохранить ссылку и отправить её любимому.</div>
+  </div>
+
+  <div class="right">
+    <div class="card-art" aria-hidden="false">
+      <div style="position:absolute;left:12px;top:12px;color:rgba(255,255,255,0.06);font-size:12px">— небольшой сюрприз —</div>
+      <div class="heart" id="bigHeart">❤</div>
+      <div class="muted" id="subtitle">Нажми кнопку, чтобы продолжить</div>
+      <canvas id="confettiCanvas" style="position:absolute;inset:0;pointer-events:none"></canvas>
+    </div>
+
+    <div id="resultArea" style="width:100%">
+      <div class="result" id="resultBox">
+        <h2 id="resultTitle">Готова(ен) показать признание?</h2>
+        <p id="resultText" class="muted">Нажми кнопку ниже — и экран наполнится теплом.</p>
+        <button id="revealBtn" class="big-cta" aria-label="Показать признание">Показать признание</button>
+      </div>
+
+      <div class="footer">
+        <div class="small muted">Сделано с ❤️ — можешь редактировать текст в коде</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- decorative floating hearts (generated by JS) -->
+</div>
+
+<script>
+/* Simple interactive logic + confetti */
+const targetInput = document.getElementById('targetName');
+const choices0 = document.getElementById('choices0');
+const choices1 = document.getElementById('choices1');
+const qBlock = document.getElementById('qBlock');
+const playHint = document.getElementById('playHint');
+const subtitle = document.getElementById('subtitle');
+const revealBtn = document.getElementById('revealBtn');
+const resultTitle = document.getElementById('resultTitle');
+const resultText = document.getElementById('resultText');
+const bigHeart = document.getElementById('bigHeart');
+const surpriseBtn = document.getElementById('surpriseBtn');
+
+let gameState = {
+  mood: null,
+  gift: null,
+};
+
+function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* Step 1: mood selection */
+choices0.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  const mood = btn.dataset.choice || (btn.id === 'surpriseBtn' ? 'surprise' : null);
+  gameState.mood = mood;
+  // show next question
+  qBlock.style.display = 'block';
+  playHint.style.display = 'block';
+  subtitle.textContent = mood === 'funny' ? 'Улыбнись 😄' : (mood === 'romantic' ? 'Для сердца — только лучшее' : 'Что-то волшебное... ✨');
+});
+
+/* Step 2: gift selection */
+choices1.addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  gameState.gift = btn.dataset.choice;
+  playHint.style.display = 'block';
+  // small visual feedback
+  btn.animate([{transform:'translateX(-4px)'},{transform:'translateX(0)'}],{duration:180});
+});
+
+/* reveal logic */
+revealBtn.addEventListener('click', ()=>{
+  const name = (targetInput.value || 'Ты').trim();
+  // If surprise mood not chosen, ensure defaults
+  if(!gameState.mood) gameState.mood = 'romantic';
+  if(!gameState.gift) gameState.gift = randomChoice(['picnic','movie','flowers']);
+
+  // Build message variants
+  const variants = {
+    romantic: [
+      `Дорогая(ой) ${name}, каждое утро с тобой — как песня. Хочу быть рядом всегда.`,
+      `${name}, ты — моё самое тёплое место. Прими моё признание: я влюблён(а) в тебя.`,
+    ],
+    funny: [
+      `${name}, я думал(а) -- нужен Wi-Fi, кофе и ты. Без тебя ни один из трёх не работает.`,
+      `${name}, если бы любовь была заклинанием, я бы прочитал(а) её 100500 раз.`,
+    ],
+    surprise: [
+      `${name}, у меня для тебя сюрприз: я тебя очень люблю. Готов(а) провести этот сюрприз вместе?`,
+      `${name}, вот кратко: ты — причина моих улыбок. Это признание — моё маленькое «да» тебе.`,
+    ]
+  };
+
+  const chosenArray = variants[gameState.mood] || variants['romantic'];
+  const chosenText = randomChoice(chosenArray);
+
+  // personalize further with gift
+  let giftLine = '';
+  if(gameState.gift === 'flowers') giftLine = 'Обещаю приносить тебе цветы без повода.';
+  if(gameState.gift === 'picnic') giftLine = 'Давай устроим пикник и смотреть на закат вместе.';
+  if(gameState.gift === 'movie') giftLine = 'Приглашаю на вечер кино — только мы и попкорн.';
+
+  // animate and show
+  resultTitle.textContent = 'Откровение';
+  resultText.textContent = chosenText + (giftLine ? (' ' + giftLine) : '');
+  // animate heart and confetti
+  heartbeatOnce();
+  launchConfetti();
+  // add floating hearts trail
+  spawnFloatingHearts(12);
+});
+
+/* heartbeat animation single pulse */
+function heartbeatOnce(){
+  bigHeart.animate([
+    { transform: 'scale(1)' },
+    { transform: 'scale(1.35)' },
+    { transform: 'scale(0.95)' },
+    { transform: 'scale(1)' }
+  ], { duration: 1000, easing:'cubic-bezier(.4,.0,.2,1)' });
+}
+
+/* Floating hearts */
+function spawnFloatingHearts(n=8){
+  const card = document.querySelector('.card');
+  for(let i=0;i<n;i++){
+    const el = document.createElement('div');
+    el.className = 'floating-heart';
+    el.textContent = '❤';
+    const startX = 40 + Math.random()*80; // percent
+    const startY = 80 + Math.random()*20; // percent
+    el.style.left = startX + '%';
+    el.style.top = startY + '%';
+    const dur = 2200 + Math.random()*1800;
+    el.style.fontSize = (12 + Math.random()*18) + 'px';
+    el.style.animationDuration = dur + 'ms';
+    el.style.opacity = 0.9;
+    card.appendChild(el);
+    setTimeout(()=> el.remove(), dur + 200);
+  }
+}
+
+/* Confetti canvas implementation (simple particle system) */
+const canvas = document.getElementById('confettiCanvas');
+const ctx = canvas.getContext('2d');
+let confettiParticles = [];
+function resizeCanvas(){
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function launchConfetti(){
+  // create particles
+  const count = 60;
+  for(let i=0;i<count;i++){
+    confettiParticles.push(createParticle());
+  }
+  if(!confettiRunning){
+    confettiRunning = true;
+    requestAnimationFrame(confettiLoop);
+  }
+}
+
+function createParticle(){
+  const w = canvas.width, h = canvas.height;
+  const colors = ['#ff4d8a','#ffd166','#6b6dff','#66e2b3','#ff9f43'];
+  return {
+    x: Math.random()*w,
+    y: -10 - Math.random()*h*0.1,
+    vx: (Math.random()-0.5)*3,
+    vy: 2 + Math.random()*4,
+    size: 6 + Math.random()*10,
+    rot: Math.random()*360,
+    vr: (Math.random()-0.5)*8,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    ttl: 4000 + Math.random()*2000,
+    born: performance.now()
+  };
+}
+
+let confettiRunning = false;
+function confettiLoop(ts){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const now = performance.now();
+  confettiParticles = confettiParticles.filter(p => now - p.born < p.ttl + 800);
+  for(const p of confettiParticles){
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.03;
+    p.rot += p.vr;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+    ctx.restore();
+  }
+  if(confettiParticles.length > 0){
+    requestAnimationFrame(confettiLoop);
+  } else {
+    confettiRunning = false;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+}
+
+/* Small UX: pressing Enter focuses reveal button */
+targetInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') revealBtn.focus();
+});
+
+/* Make it shareable: update title/message in URL (so link can be sent) */
+function updateURLState(){
+  const params = new URLSearchParams();
+  const name = (targetInput.value || '').trim();
+  if(name) params.set('to', name);
+  if(gameState.mood) params.set('mood', gameState.mood);
+  if(gameState.gift) params.set('gift', gameState.gift);
+  const newUrl = location.pathname + '?' + params.toString();
+  history.replaceState(null, '', newUrl);
+}
+[targetInput, choices0, choices1].forEach(el=>{
+  el.addEventListener('click', updateURLState);
+});
+targetInput.addEventListener('input', updateURLState);
+
+/* Read initial state from URL if present */
+(function readStateFromURL(){
+  const p = new URLSearchParams(location.search);
+  if(p.get('to')) targetInput.value = p.get('to');
+  if(p.get('mood')) {
+    gameState
+  if(p.get('mood')) {
+    gameState.mood = p.get('mood');
+    // показать блок вопросов и подсказку если есть настроение
+    qBlock.style.display = 'block';
+    playHint.style.display = 'block';
+  }
+  if(p.get('gift')) {
+    gameState.gift = p.get('gift');
+  }
+})();
+
+/* Optional: quick share button that copies current URL */
+const shareBtn = document.createElement('button');
+shareBtn.className = 'btn secondary';
+shareBtn.style.marginTop = '10px';
+shareBtn.textContent = 'Скопировать ссылку';
+shareBtn.addEventListener('click', async ()=>{
+  updateURLState();
+  try{
+    await navigator.clipboard.writeText(location.href);
+    shareBtn.textContent = 'Ссылка скопирована!';
+    setTimeout(()=> shareBtn.textContent = 'Скопировать ссылку', 1800);
+  }catch(e){
+    shareBtn.textContent = 'Нельзя скопировать';
+    setTimeout(()=> shareBtn.textContent = 'Скопировать ссылку', 1800);
+  }
+});
+document.querySelector('.left').appendChild(shareBtn);
+</script>
+</body>
+</html>
